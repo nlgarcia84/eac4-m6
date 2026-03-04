@@ -50,6 +50,41 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
     });
 
     // Funcio Fail reutilitzable
+    const failIncrement = () => {
+      if (fails < MAX_FAILS) {
+        fails++;
+        failsElement.textContent = fails;
+        msgElement.classList.add('bad');
+        msgElement.textContent = 'Codi incorrecte. Torna-ho a intentar.';
+
+        switch (fails) {
+          case 0:
+            statusImgElement.src = '/img/estat0.png';
+            break;
+          case 1:
+            statusImgElement.src = '/img/estat1.png';
+            break;
+          case 2:
+            statusImgElement.src = '/img/estat2.png';
+            break;
+          case 3:
+            statusImgElement.src = '/img/estat3.png';
+            break;
+          case 4:
+            statusImgElement.src = '/img/estat4.png';
+            break;
+          case 5:
+            statusImgElement.src = '/img/estat5.png';
+            tryBtnElement.setAttribute('disabled', true);
+            msgElement.textContent = `Agent ${agentName} (${agentRank}), missió fallida! El fitxer ha estat esborrat.`;
+            retryFormElement.classList.remove('hidden');
+            // retryBtnElement.addEventListener('click', (e) => e.preventDefault());
+            gameOver;
+            break;
+        }
+      }
+    };
+
     const fail = () => {
       if (codeInputElement.value === SECRET) {
         // Guardem al LS l'últim agent que ha guanyat
@@ -61,40 +96,7 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
         tryBtnElement.setAttribute('disabled', true);
         retryFormElement.classList.remove('hidden');
       } else {
-        if (fails < MAX_FAILS) {
-          fails++;
-          failsElement.textContent = fails;
-          msgElement.classList.add('bad');
-          msgElement.textContent = 'Codi incorrecte. Torna-ho a intentar.';
-
-          switch (fails) {
-            case 0:
-              statusImgElement.src = '/img/estat0.png';
-              break;
-            case 1:
-              statusImgElement.src = '/img/estat1.png';
-              break;
-            case 2:
-              statusImgElement.src = '/img/estat2.png';
-              break;
-            case 3:
-              statusImgElement.src = '/img/estat3.png';
-              break;
-            case 4:
-              statusImgElement.src = '/img/estat4.png';
-              break;
-            case 5:
-              statusImgElement.src = '/img/estat5.png';
-              break;
-          }
-        }
-        if (fails === 5) {
-          tryBtnElement.setAttribute('disabled', true);
-          msgElement.textContent = `Agent ${agentName} (${agentRank}), missió fallida! El fitxer ha estat esborrat.`;
-          retryFormElement.classList.remove('hidden');
-          retryBtnElement.addEventListener('click', (e) => e.preventDefault());
-          gameOver;
-        }
+        failIncrement();
       }
     };
 
@@ -104,7 +106,8 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
     });
 
     lupaElement.addEventListener('mouseover', () => {
-      fail();
+      // fail();
+      failIncrement();
       let randomPosition = Math.floor(Math.random() * 4);
       hintBoxElement.textContent = `Pista: el codi conté el número ${SECRET.charAt(randomPosition)}`;
       hintBoxElement.classList.remove('hidden');
