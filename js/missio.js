@@ -56,11 +56,6 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
         localStorage.setItem('rang', agentRank);
         localStorage.setItem('nom', agentName);
 
-        // Recuperem el LS i el renderitzem al Record
-        let recordName = localStorage.getItem('nom');
-        let recordRank = localStorage.getItem('rang');
-        recordTextElement.textContent = `${recordRank} ${recordName}`;
-
         msgElement.classList.add('ok');
         msgElement.textContent = `Agent ${agentName} (${agentRank}), caixa oberta! Fitxer salvat.`;
         tryBtnElement.setAttribute('disabled', true);
@@ -118,5 +113,9 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
     lupaElement.addEventListener('mouseout', () => {
       hintBoxElement.classList.add('hidden');
     });
+    // Recuperem el LS i el renderitzem al Record
+    let recordName = localStorage.getItem('nom');
+    let recordRank = localStorage.getItem('rang');
+    recordTextElement.textContent = `${recordRank} ${recordName}`;
   });
 }
