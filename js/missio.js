@@ -49,7 +49,7 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       }
     });
 
-    // Funcio Fail reutilitzable
+    // Funcio FailIncrement reutilitzable
     const failIncrement = () => {
       if (fails < MAX_FAILS) {
         fails++;
@@ -84,8 +84,11 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
         }
       }
     };
+    //
+    tryBtnElement.addEventListener('click', () => {
+      // Setegem la classe de msgElement per si está vermella
+      msgElement.classList.remove('bad');
 
-    const fail = () => {
       if (codeInputElement.value === SECRET) {
         // Guardem al LS l'últim agent que ha guanyat
         localStorage.setItem('rang', agentRank);
@@ -98,11 +101,6 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       } else {
         failIncrement();
       }
-    };
-
-    //
-    tryBtnElement.addEventListener('click', () => {
-      fail();
     });
 
     lupaElement.addEventListener('mouseover', () => {
