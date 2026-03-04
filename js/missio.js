@@ -75,10 +75,17 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
             break;
           case 5:
             statusImgElement.src = '/img/estat5.png';
+
+            // Un cop arribat a cinc intents desactivem el botó de 'Provar'
             tryBtnElement.setAttribute('disabled', true);
+
+            // Imprimim missatge de no-exit
             msgElement.textContent = `Agent ${agentName} (${agentRank}), missió fallida! El fitxer ha estat esborrat.`;
+
+            // Mostrem el 'Tornar a Provar'
             retryFormElement.classList.remove('hidden');
-            // retryBtnElement.addEventListener('click', (e) => e.preventDefault());
+
+            reset();
             gameOver;
             break;
         }
@@ -90,33 +97,60 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       msgElement.classList.remove('bad');
 
       if (codeInputElement.value === SECRET) {
+        // Mostrem el 'Tornar a Provar'
+        retryFormElement.classList.remove('hidden');
+        reset();
         // Guardem al LS l'últim agent que ha guanyat
         localStorage.setItem('rang', agentRank);
         localStorage.setItem('nom', agentName);
 
+        // Posem en escolta la lupa amb l'event mouseover
+        lupaElement.removeEventListener('mouseover', lupaMessage);
+
+        // Estilem el missatge en verd indicant l'acert
         msgElement.classList.add('ok');
+
+        // Innjectem el texte d'èxit
         msgElement.textContent = `Agent ${agentName} (${agentRank}), caixa oberta! Fitxer salvat.`;
+
+        // Desactivem el botó de 'Provar' un cop descobert el codi
         tryBtnElement.setAttribute('disabled', true);
-        retryFormElement.classList.remove('hidden');
       } else {
+        // Incrementem el número de fails fins a 5
         failIncrement();
       }
     });
 
+    // Mostra el missatge de la pista al pasar per sobre de la lupa
     lupaElement.addEventListener('mouseover', () => {
-      // fail();
-      failIncrement();
-      let randomPosition = Math.floor(Math.random() * 4);
-      hintBoxElement.textContent = `Pista: el codi conté el número ${SECRET.charAt(randomPosition)}`;
-      hintBoxElement.classList.remove('hidden');
+      lupaMessage();
     });
 
+    // Elimina el missatge al sortir de la lupa
     lupaElement.addEventListener('mouseout', () => {
       hintBoxElement.classList.add('hidden');
     });
+
+    // Funció que genera el missatge de la pista
+    const lupaMessage = () => {
+      if (fails < MAX_FAILS) {
+        failIncrement();
+        let randomPosition = Math.floor(Math.random() * 4);
+        hintBoxElement.textContent = `Pista: el codi conté el número ${SECRET.charAt(randomPosition)}`;
+        hintBoxElement.classList.remove('hidden');
+      }
+    };
+
     // Recuperem el LS i el renderitzem al Record
     let recordName = localStorage.getItem('nom');
     let recordRank = localStorage.getItem('rang');
     recordTextElement.textContent = `${recordRank} ${recordName}`;
+
+    const reset = () => {
+      // Mostra el missatge de la pista al pasar per sobre de la lupa
+      lupaElement.removeEventListener('mouseover', () => {
+        lupaMessage();
+      });
+    };
   });
 }
