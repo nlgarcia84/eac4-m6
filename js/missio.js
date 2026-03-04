@@ -82,9 +82,6 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
             // Imprimim missatge de no-exit
             msgElement.textContent = `Agent ${agentName} (${agentRank}), missió fallida! El fitxer ha estat esborrat.`;
 
-            // Mostrem el 'Tornar a Provar'
-            retryFormElement.classList.remove('hidden');
-
             reset();
             gameOver;
             break;
@@ -97,8 +94,6 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       msgElement.classList.remove('bad');
 
       if (codeInputElement.value === SECRET) {
-        // Mostrem el 'Tornar a Provar'
-        retryFormElement.classList.remove('hidden');
         reset();
         // Guardem al LS l'últim agent que ha guanyat
         localStorage.setItem('rang', agentRank);
@@ -150,6 +145,12 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       // Mostra el missatge de la pista al pasar per sobre de la lupa
       lupaElement.removeEventListener('mouseover', () => {
         lupaMessage();
+      });
+
+      // Mostrem el 'Tornar a Provar'
+      retryFormElement.classList.remove('hidden');
+      retryBtnElement.addEventListener('submit', (e) => {
+        e.preventDefault();
       });
     };
   });
