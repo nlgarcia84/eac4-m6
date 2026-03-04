@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EAC4 - El codi secret</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="./js/missio.js"></script>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Missió de Rescat: El Codi Secret</h1>
+
+      <section class="hud">
+        <div><strong>Agent:</strong> <span id="agentInfo">—</span></div>
+        <div>
+          <strong>Intents fallits:</strong> <span id="fails">0</span> / 5
+        </div>
+      </section>
+
+      <section class="status">
+        <img id="statusImg" src="img/estat0.png" alt="Estat del cadenat" />
+      </section>
+
+      <section class="inputArea">
+        <p>Introdueix el codi secret (només lletres i números):</p>
+        <div class="codeRow">
+          <input
+            id="codeInput"
+            type="text"
+            inputmode="text"
+            autocomplete="off"
+          />
+          <button id="tryBtn" class="btn">Provar</button>
+        </div>
+        <p id="hintInline" class="muted"></p>
+        <p id="msg" class="msg" aria-live="polite"></p>
+      </section>
+
+      <section class="hintSystem">
+        <div class="lupaBox">
+          <img id="lupa" src="img/lupa.png" alt="Llupa (pista)" />
+          <div id="hintBox" class="hintBox hidden">
+            <!--  -->
+          </div>
+        </div>
+        <p class="muted">
+          Passa el ratolí per sobre la llupa per veure una pista.
+        </p>
+      </section>
+
+      <form id="retryForm" class="retry hidden">
+        <button id="retryBtn" class="btn" type="submit">Tornar a provar</button>
+      </form>
+
+      <section class="record">
+        <strong>Rècord actual:</strong>
+        <span id="recordText">Cap agent encara.</span>
+      </section>
+    </main>
+  </body>
+</html>

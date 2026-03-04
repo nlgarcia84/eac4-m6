@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>EAC4 - El codi secret</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script defer src="./js/index.js"></script>
+  </head>
+
+  <body>
+    <main class="card">
+      <h1>Registre d’Agent Secret</h1>
+
+      <section class="record">
+        <strong>Rècord actual:</strong>
+        <span id="recordText">Cap agent encara.</span>
+      </section>
+
+      <form id="agentForm" novalidate>
+        <label>
+          Nom de l’agent
+          <input type="text" id="agentName" autocomplete="off" />
+        </label>
+
+        <label>
+          Rang
+          <select id="agentRank">
+            <option value="">-- Selecciona un rang --</option>
+            <option value="Recluta">Recluta</option>
+            <option value="Espia">Espia</option>
+            <option value="Mestre d'espies">Mestre d'espies</option>
+          </select>
+        </label>
+
+        <fieldset>
+          <legend>Equip de suport</legend>
+          <label class="inline">
+            <input
+              type="radio"
+              name="supportTeam"
+              value="Tecnològic"
+              id="tecnologic"
+            />
+            Tecnològic
+          </label>
+          <label class="inline">
+            <input type="radio" name="supportTeam" value="Tàctic" id="tactic" />
+            Tàctic
+          </label>
+          <label class="inline">
+            <input
+              type="radio"
+              name="supportTeam"
+              value="Infiltració"
+              id="infiltracio"
+            />
+            Infiltració
+          </label>
+        </fieldset>
+
+        <p id="errorBox" class="error" aria-live="polite"></p>
+
+        <button class="btn" type="submit">Accedir a la missió</button>
+      </form>
+    </main>
+  </body>
+</html>
