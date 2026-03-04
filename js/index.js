@@ -1,3 +1,4 @@
+const recordTextElement = document.getElementById('recordText');
 const formElement = document.getElementById('agentForm');
 const agentNameElement = document.getElementById('agentName');
 const agentRankElement = document.getElementById('agentRank');
@@ -5,6 +6,11 @@ const formRadios = formElement.querySelectorAll('input[type="radio"]');
 const errorBoxElement = document.getElementById('errorBox');
 
 let errorMessage = '';
+
+// Recuperem el LS i el renderitzem al Record
+let recordName = localStorage.getItem('nom');
+let recordRank = localStorage.getItem('rang');
+recordTextElement.textContent = `${recordRank} ${recordName}`;
 
 formElement.addEventListener('submit', (e) => {
   e.preventDefault();
