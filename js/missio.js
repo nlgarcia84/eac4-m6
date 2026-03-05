@@ -24,6 +24,11 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
     const agentName = sessionStorage.getItem('nom');
     const agentRank = sessionStorage.getItem('rank');
 
+    retryFormElement.addEventListener('submit', (e) => {
+      e.preventDefault();
+      reset();
+    });
+
     agentInfoElement.textContent = `${agentRank} ${agentName}`;
 
     // Comprovació camp input del codi, only numbers
@@ -78,16 +83,17 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
 
             // Un cop arribat a cinc intents desactivem el botó de 'Provar'
             tryBtnElement.setAttribute('disabled', true);
-
             // Imprimim missatge de no-exit
             msgElement.textContent = `Agent ${agentName} (${agentRank}), missió fallida! El fitxer ha estat esborrat.`;
 
             reset();
+
             gameOver;
             break;
         }
       }
     };
+
     //
     tryBtnElement.addEventListener('click', () => {
       // Setegem la classe de msgElement per si está vermella
@@ -95,43 +101,60 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
 
       if (codeInputElement.value === SECRET) {
         reset();
+
         // Guardem al LS l'últim agent que ha guanyat
         localStorage.setItem('rang', agentRank);
         localStorage.setItem('nom', agentName);
-
-        // Posem en escolta la lupa amb l'event mouseover
-        lupaElement.removeEventListener('mouseover', lupaMessage);
 
         // Estilem el missatge en verd indicant l'acert
         msgElement.classList.add('ok');
 
         // Innjectem el texte d'èxit
         msgElement.textContent = `Agent ${agentName} (${agentRank}), caixa oberta! Fitxer salvat.`;
-
-        // Desactivem el botó de 'Provar' un cop descobert el codi
-        tryBtnElement.setAttribute('disabled', true);
       } else {
         // Incrementem el número de fails fins a 5
         failIncrement();
       }
     });
 
+    // Aqui els events de 'mouseover' i 'mouseout'
     // Mostra el missatge de la pista al pasar per sobre de la lupa
-    lupaElement.addEventListener('mouseover', () => {
-      lupaMessage();
-    });
 
-    // Elimina el missatge al sortir de la lupa
-    lupaElement.addEventListener('mouseout', () => {
-      hintBoxElement.classList.add('hidden');
-    });
+    if ((fails < MAX_FAILS) & (codeInputElement.value !== SECRET)) {
+      lupaElement.addEventListener('mouseover', () => {
+        lupaMessage();
+      });
+
+      // Elimina el missatge al sortir de la lupa
+      lupaElement.addEventListener('mouseout', () => {
+        hintBoxElement.classList.add('hidden');
+      });
+    }
+    // Mostra el missatge de la pista al pasar per sobre de la lupa
+    if (fails === 5 || codeInputElement.value === SECRET) {
+      tryBtnElement.setAttribute('disable', true);
+
+      lupaElement.removeEventListener('mouseover', () => {
+        lupaMessage();
+      });
+
+      // Elimina el missatge al sortir de la lupa
+      lupaElement.removeEventListener('mouseout', () => {
+        hintBoxElement.classList.add('hidden');
+      });
+    }
 
     // Funció que genera el missatge de la pista
     const lupaMessage = () => {
       if (fails < MAX_FAILS) {
+        // Incrementa un fail
         failIncrement();
+
+        // Creem el text amb el digit aleatori
         let randomPosition = Math.floor(Math.random() * 4);
         hintBoxElement.textContent = `Pista: el codi conté el número ${SECRET.charAt(randomPosition)}`;
+
+        // Mostrem el missatge
         hintBoxElement.classList.remove('hidden');
       }
     };
@@ -141,17 +164,20 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
     let recordRank = localStorage.getItem('rang');
     recordTextElement.textContent = `${recordRank} ${recordName}`;
 
+    // Funció per resetejar
     const reset = () => {
-      // Mostra el missatge de la pista al pasar per sobre de la lupa
-      lupaElement.removeEventListener('mouseover', () => {
-        lupaMessage();
-      });
-
-      // Mostrem el 'Tornar a Provar'
-      retryFormElement.classList.remove('hidden');
-      retryBtnElement.addEventListener('submit', (e) => {
-        e.preventDefault();
-      });
+      if (fails === MAX_FAILS || codeInputElement.value === SECRET) {
+        retryFormElement.classList.remove('hidden');
+        retryBtnElement.addEventListener('click', () => {
+          tryBtnElement.removeAttribute('disabled');
+          statusImgElement.src = '/img/estat0.png';
+          fails = 0;
+          failsElement.textContent = fails;
+          msgElement.textContent = '';
+        });
+      } else {
+        retryFormElement.classList.add('hidden');
+      }
     };
   });
 }
