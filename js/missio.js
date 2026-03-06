@@ -100,6 +100,7 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       msgElement.classList.remove('bad');
 
       if (codeInputElement.value === SECRET) {
+        tryBtnElement.setAttribute('disabled', true);
         reset();
 
         // Guardem al LS l'últim agent que ha guanyat
@@ -129,24 +130,18 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
       lupaElement.addEventListener('mouseout', () => {
         hintBoxElement.classList.add('hidden');
       });
-    }
-    // Mostra el missatge de la pista al pasar per sobre de la lupa
-    if (fails === 5 || codeInputElement.value === SECRET) {
+    } else {
       tryBtnElement.setAttribute('disable', true);
 
       lupaElement.removeEventListener('mouseover', () => {
         lupaMessage();
       });
-
-      // Elimina el missatge al sortir de la lupa
-      lupaElement.removeEventListener('mouseout', () => {
-        hintBoxElement.classList.add('hidden');
-      });
     }
 
     // Funció que genera el missatge de la pista
     const lupaMessage = () => {
-      if (fails < MAX_FAILS) {
+      // Condicionem l'aparició del missatge segons s'hagi descobert el codi secret o no
+      if (codeInputElement.value !== SECRET) {
         // Incrementa un fail
         failIncrement();
 
