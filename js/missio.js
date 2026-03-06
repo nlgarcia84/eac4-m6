@@ -169,6 +169,7 @@ if (!sessionStorage.getItem('nom') || !sessionStorage.getItem('rank')) {
           fails = 0;
           failsElement.textContent = fails;
           msgElement.textContent = '';
+          codeInputElement.value = '';
         });
       } else {
         retryFormElement.classList.add('hidden');
